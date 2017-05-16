@@ -20,7 +20,7 @@ public class GrafoLA extends Polinomio {
             vertice = new NodoLA(0, null);
             this.vecinos[i] = vertice;
         }
-        subgrafos=new int[vertices+1];
+        subgrafos = new int[vertices + 1];
     }
 
     public int getTotalAristas() {//Obtiene el numero total de aristas en el grafo. Dicho dato se encuentra almacenado en la posicion 0 del vector "vecinos" en el campo Liga 
@@ -174,8 +174,8 @@ public class GrafoLA extends Polinomio {
         m = this.getTotalAristas();//Obtiene el numero de aristas, siendo necesario hacer un casting.
         n = this.getTotalVertices();//Obtiene el numero de vertices.
         this.dfs(1, 1);
-        for(int i=1;i<subgrafos.length;i++){
-            if(subgrafos[i]==0){
+        for (int i = 1; i < subgrafos.length; i++) {
+            if (subgrafos[i] == 0) {
                 return false;
             }
         }
@@ -183,25 +183,41 @@ public class GrafoLA extends Polinomio {
     }
 
     public void dfs(int vertice, int subGrafo) {
+
+//        System.out.println("vecino: " + vertice);
         subgrafos[vertice] = subGrafo;
-        NodoLA aux = (NodoLA) vecinos[vertice];
-        for(int i=1;i<=vecinos[aux.getVertice()].getVertice();i++){
-            aux = (NodoLA) aux.getLiga();
+        NodoLA aux = (NodoLA) vecinos[vertice].getLiga();
+        for (int i = 0; i < vecinos[vertice].getVertice(); i++) {
+            //aux = (NodoLA) aux.getLiga();
+            //vertice=aux2.getVertice();
             if (subgrafos[aux.getVertice()] == 0) {
-            dfs(aux.getVertice(),subGrafo);
+                dfs(aux.getVertice(), subGrafo);
             }
-        }        
+            aux = (NodoLA) aux.getLiga();
+        }
     }
-//
-//     public int[] subgrafos() {
-//     int[] retorno = new int[vecinos[0].getVertice() + 1];
-//     int i, j;
-//     boolean bandera=false;
-//     while()
-//     this.dfs(, retorno, i);
-//     return (retorno);
-//        
-//     }
+
+    public int subgrafos() {
+        int subgrafo, indice;
+        subgrafo = 1;
+        while (true) {
+            for (indice = 1; indice < subgrafos.length; indice++) {
+                if (this.subgrafos[indice] == 0) {
+                    this.dfs(indice, subgrafo);
+                    subgrafo++;
+                }
+            }
+            for (int i = 1; i < subgrafos.length; i++) {
+                if (subgrafos[i] == 0) {
+                    break;
+                }
+            }
+            subgrafos[0] = subgrafo;
+            break;
+        }
+        return subgrafo;
+
+    }
 
     public boolean esCompleto() {//Un grafo es completo, todos sus vertices estan conectados entre si, cuando su densidad es igual a 1
         return (densidad() == 1);
@@ -240,19 +256,19 @@ public class GrafoLA extends Polinomio {
 
     public String polinomioCromatico() {
 
-        String poli, resul = null;
+        String poli, resul;
         Polinomio polic = new Polinomio();
-        //Polinomio px = new Polinomio();
         polic.insertarPolinomio("1");
         if (esCompleto()) { //x*(x-1)*(x-2)*....*(x-(n-1))
             for (int i = 1; i <= this.getTotalVertices(); i++) {
-                poli = "x".concat(String.valueOf(-(i - 1)));
+                poli = "x-".concat(String.valueOf((i - 1)));
                 polic = polic.mult(value(poli));
-                polic = polic.mult(value("x"));
-                resul = polic.listaAString();
-                
             }
+
+            //polic = polic.mult(value("x"));
+            resul = polic.listaAString();
             return resul;
+
         }
         if (esDisperso()) { //x^n
             poli = "x".concat(String.valueOf(this.getTotalVertices()));
@@ -261,27 +277,24 @@ public class GrafoLA extends Polinomio {
         }
         if (esArbol()) { // x*(x-1)^(n-1)
             //poli = "x-1";
-            for(int i=1;i<this.getTotalVertices();i++){
-                polic=polic.mult(value("x-1"));
+            for (int i = 1; i < this.getTotalVertices(); i++) {
+                polic = polic.mult(value("x-1"));
             }
             polic = polic.mult(value("x"));
-            
+
             resul = polic.listaAString();
             return resul;
         }
         if (esCiclo()) { // (x-1)^n+(-1)^n*(x-1). Está agregando un 0 al final, por lo que el grado del ultimo termino es 10
-           // poli = "x-1";
-            for(int i=1;i<=this.getTotalVertices();i++){
-                polic=polic.mult(value("x-1"));
-                resul = polic.listaAString();
+            // poli = "x-1";
+            for (int i = 1; i <= this.getTotalVertices(); i++) {
+                polic = polic.mult(value("x-1"));
             }
-            if(this.getTotalVertices()%2==0){
-                polic=polic.sumar(value("x-1"));
-                resul = polic.listaAString();
-            }else{
-                poli="x-1";
-                polic=polic.sumar(value(poli).mult(value("-1")));
-                resul = polic.listaAString();
+            if (this.getTotalVertices() % 2 == 0) {
+                polic = polic.sumar(value("x-1"));
+            } else {
+                poli = "x-1";
+                polic = polic.sumar(value(poli).mult(value("-1")));
             }
             return polic.listaAString();
         }

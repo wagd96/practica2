@@ -10,10 +10,10 @@ import java.math.BigInteger;
 
 public class Polinomio extends ListaSimpleCC {
 
- public static Polinomio value(String px) {
-        Polinomio poli =new Polinomio();
+    public static Polinomio value(String px) {
+        Polinomio poli = new Polinomio();
         poli.insertarPolinomio(px);
-        
+
         return poli;
     }
 //Suma dos polinomios
@@ -85,17 +85,12 @@ public class Polinomio extends ListaSimpleCC {
         //Verifica que la lista no se encuentre vacía
         if (!esVacia()) {
             while (!(finLista(p))) {
-                if (p.getExp() == 0) {
-                    if (p.getCoef().signum() == 1) {//Le asigna su correspondiente signo al coeficiente en el termino independiente
-                        polinomio = polinomio.concat("+".concat(p.getCoef().toString()));
+                if (p.getExp() > 0) {
+                    if (p.getCoef().signum() == -1) {//Separa el coeficiente y el exponente por medio de la variable x
+                        polinomio = polinomio.concat(p.getCoef().toString().concat("x^").concat(Integer.toString(p.getExp())));
                     } else {
-                        polinomio = polinomio.concat((p.getCoef()).toString());
+                        polinomio = polinomio.concat("+".concat(p.getCoef().toString().concat("x^").concat(Integer.toString(p.getExp()))));
                     }
-
-                } else if (p.getCoef().signum() == -1 || polinomio.isEmpty()) {//Separa el coeficiente y el exponente por medio de la variable x
-                    polinomio = polinomio.concat(p.getCoef().toString().concat("x^").concat(Integer.toString(p.getExp())));
-                } else {
-                    polinomio = polinomio.concat("+".concat(p.getCoef().toString().concat("x^").concat(Integer.toString(p.getExp()))));
                 }
                 p = p.getLiga();
             }
@@ -153,7 +148,7 @@ public class Polinomio extends ListaSimpleCC {
             while (siguiente != this.nodoCabeza()) {//Recorre el polinomio
                 if (actual.getExp() == siguiente.getExp()) {//Si encuentra dos monomios con exponente igual, suma sus coeficientes 
                     suma = suma.add(actual.getCoef().add(siguiente.getCoef()));
-                    if (!suma.equals(0)) {//Si la suma de ambos coeficientes es diferente de cero, elimina un monomio para que quede sólo un monomio por exponente
+                    if (!suma.equals(BigInteger.valueOf(0))) {//Si la suma de ambos coeficientes es diferente de cero, elimina un monomio para que quede sólo un monomio por exponente
                         siguiente.setCoef(suma);
                         previo.setLiga(siguiente);
                         actual.setLiga(null);
@@ -196,14 +191,15 @@ public class Polinomio extends ListaSimpleCC {
         return retorno;
     }
 
-    public BigInteger factorial(BigInteger num) {
-        if (num.intValue() == 0) {
-            return BigInteger.valueOf(1);
+    public BigInteger factorial(BigInteger n) {
+        BigInteger retorno = BigInteger.ONE;
+
+        while (!n.equals(BigInteger.ZERO)) {
+            retorno = retorno.multiply(n);
+            n = n.subtract(BigInteger.ONE);
         }
-        if (num.intValue() == 1) {
-            return BigInteger.valueOf(1);
-        }
-        return num.multiply(factorial(num.subtract(BigInteger.valueOf(1))));
+
+        return retorno;
     }
 
     public Polinomio expansion(Polinomio poli, int exponente) {
@@ -215,11 +211,9 @@ public class Polinomio extends ListaSimpleCC {
         }
         return resultado;
     }
-    
-    
 
 //Convierte un dato en String a un polinomio representado como Lista simplemente ligada circular con nodo cabeza
-      public void insertarPolinomio(String polinomio) {
+    public void insertarPolinomio(String polinomio) {
         String monomio;
         int inicio = 0, fin;
         //Recorre el String reconociendo cada monomio por separado
@@ -235,6 +229,7 @@ public class Polinomio extends ListaSimpleCC {
         this.ordenaPolinomio();
 
     }
+
     //Ingresa el monomio obtenido a la lista 
     public void insertarMonomio(String monomio, Polinomio f) {
         String mono = ordenarMonomio(monomio);
@@ -260,7 +255,7 @@ public class Polinomio extends ListaSimpleCC {
             }
 
         }
-        
+
         f.insertar(coef, exp);
     }
 

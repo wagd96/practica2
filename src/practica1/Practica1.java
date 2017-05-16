@@ -25,17 +25,17 @@ public class Practica1 {
         time_start = System.currentTimeMillis();
         
 //        ReallyHeavyTask(); // llamamos a la tarea        
-        GrafoLA prueba = new GrafoLA(10);
-        prueba.agregarArista(1, 2);
-        prueba.agregarArista(2, 3);
-        prueba.agregarArista(3, 4);
-        prueba.agregarArista(4, 5);
-        prueba.agregarArista(5, 6);
-        prueba.agregarArista(6, 7);
-        prueba.agregarArista(7, 8);
-        prueba.agregarArista(8, 9);
-        prueba.agregarArista(9, 10);
-        prueba.agregarArista(10, 1);
+        GrafoLA prueba = new GrafoLA(3);
+        //prueba.agregarArista(1, 2);
+        //prueba.agregarArista(2, 3);
+        prueba.agregarArista(3, 1);
+//        prueba.agregarArista(4, 5);
+//        prueba.agregarArista(5, 6);
+//        prueba.agregarArista(6, 7);
+//        prueba.agregarArista(7, 8);
+//        prueba.agregarArista(8, 9);
+//        prueba.agregarArista(9, 10);
+//        prueba.agregarArista(10, 1);
 
         boolean c, ciclo, arbol;
         double d;
@@ -45,7 +45,7 @@ public class Practica1 {
         d = prueba.densidad();
         ciclo = prueba.esCiclo();
         arbol = prueba.esArbol();
-        System.out.println("ciclo= " + ciclo + " arbol= " + arbol + " d= " + d + ". c= " + c + ". n= " + prueba.getTotalVertices() + ". m= " + prueba.getTotalAristas());
+        System.out.println("ciclo= " + ciclo + " arbol= " + arbol + " d= " + d + ". c= " + c + ". n= " + prueba.getTotalVertices() + ". m= " + prueba.getTotalAristas()+" Subgrafos:"+prueba.subgrafos());
         re = prueba.polinomioCromatico();
         System.out.println("re:" + re);
         
