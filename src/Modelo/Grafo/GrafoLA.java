@@ -170,9 +170,6 @@ public class GrafoLA extends Polinomio {
     }
 
     public boolean esConexo() {
-        int n, m;//Sea n=numero de vertices y m=numero de aristas.
-        m = this.getTotalAristas();//Obtiene el numero de aristas, siendo necesario hacer un casting.
-        n = this.getTotalVertices();//Obtiene el numero de vertices.
         this.dfs(1, 1);
         for (int i = 1; i < subgrafos.length; i++) {
             if (subgrafos[i] == 0) {
