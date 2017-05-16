@@ -9,6 +9,7 @@ import Modelo.Polinomio;
 public class GrafoLA extends Polinomio {
 
     private NodoLA[] vecinos;
+    private int[] subgrafos;
     private Polinomio poliCromatico;
 
     public GrafoLA(int vertices) {//Crea un nuevo grafo representado como lista de adyacencia. Recibe por parametro el numero de vertices.
@@ -19,6 +20,7 @@ public class GrafoLA extends Polinomio {
             vertice = new NodoLA(0, null);
             this.vecinos[i] = vertice;
         }
+        subgrafos=new int[vertices+1];
     }
 
     public int getTotalAristas() {//Obtiene el numero total de aristas en el grafo. Dicho dato se encuentra almacenado en la posicion 0 del vector "vecinos" en el campo Liga 
@@ -171,16 +173,24 @@ public class GrafoLA extends Polinomio {
         int n, m;//Sea n=numero de vertices y m=numero de aristas.
         m = this.getTotalAristas();//Obtiene el numero de aristas, siendo necesario hacer un casting.
         n = this.getTotalVertices();//Obtiene el numero de vertices.
-
-        return (m >= n - 1);//Teorema de grafos
+        this.dfs(1, 1);
+        for(int i=1;i<subgrafos.length;i++){
+            if(subgrafos[i]==0){
+                return false;
+            }
+        }
+        return (true);//Teorema de grafos
     }
 
-    public void dfs(int vertice, int[] veci, int subGrafo) {
-        veci[vertice] = subGrafo;
-        NodoLA aux = (NodoLA) vecinos[vertice].getLiga();
-        if (veci[aux.getVertice()] == 0) {
-            dfs(aux.getVertice(), veci, subGrafo);
-        }
+    public void dfs(int vertice, int subGrafo) {
+        subgrafos[vertice] = subGrafo;
+        NodoLA aux = (NodoLA) vecinos[vertice];
+        for(int i=1;i<=vecinos[aux.getVertice()].getVertice();i++){
+            aux = (NodoLA) aux.getLiga();
+            if (subgrafos[aux.getVertice()] == 0) {
+            dfs(aux.getVertice(),subGrafo);
+            }
+        }        
     }
 //
 //     public int[] subgrafos() {
