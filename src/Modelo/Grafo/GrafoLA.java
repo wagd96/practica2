@@ -282,7 +282,7 @@ public class GrafoLA extends Polinomio {
             resul = polic.listaAString();
             return resul;
         }
-        if (esCiclo()) { // (x-1)^n+(-1)^n*(x-1). Está agregando un 0 al final, por lo que el grado del ultimo termino es 10
+        if (esCiclo()) { // (x-1)^n+(-1)^n*(x-1). 
             // poli = "x-1";
             for (int i = 1; i <= this.getTotalVertices(); i++) {
                 polic = polic.mult(value("x-1"));
